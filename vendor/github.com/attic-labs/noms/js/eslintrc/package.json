@@ -1,0 +1,16 @@
+{
+  "name": "@attic/eslintrc",
+  "description": "Shared eslintrc for noms",
+  "license": "Apache-2.0",
+  "version": "3.1.0",
+  "main": "index.js",
+  "dependencies": {
+    "babel-eslint": "^6.0.4",
+    "eslint": "^2.11.1",
+    "eslint-plugin-flow-vars": "^0.4.0",
+    "eslint-plugin-react": "^5.1.1"
+  },
+  "scripts": {
+    "test": "exit 0"
+  }
+}

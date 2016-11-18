@@ -1,0 +1,6 @@
+build/
+src/
+.*
+*.tgz
+*-test.js
+*-test.js.flow

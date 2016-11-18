@@ -1,0 +1,14 @@
+{
+  "name": "@attic/webpack-config",
+  "description": "Shared webpack config for noms",
+  "license": "Apache-2.0",
+  "version": "2.1.0",
+  "main": "index.js",
+  "dependencies": {
+    "babel-loader": "^6.2.1",
+    "webpack": "^1.12.11"
+  },
+  "scripts": {
+    "test": "exit 0"
+  }
+}
