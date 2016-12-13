@@ -1,5 +1,5 @@
 
-We are now porting organize which deals with the whole
+We are now porting **organize** which deals with the whole
 big tree of items down to just a few targeted individual
 stories.
 
