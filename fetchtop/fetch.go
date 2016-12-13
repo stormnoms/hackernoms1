@@ -83,7 +83,7 @@ func bigSync(ds datas.Dataset) types.Value {
 	newMap := types.NewStreamingMap(ds.Database(), streamData)
 
 	go func() {
-		for i := 12980000.0; i < maxItem; i++ {
+		for i := 8432709.0; i < 8442000.0; i++ {
 			newIndex <- i
 		}
 
