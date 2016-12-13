@@ -130,7 +130,7 @@ func main() {
 	hv, ok := ds.MaybeHeadValue()
 	if !ok {
 		fmt.Println("doing the initial sync...")
-		ds = bigSync(ds)
+		ds = littleSync(ds)
 		hv = ds.HeadValue()
 	}
 
@@ -166,7 +166,7 @@ func main() {
 	}
 }
 
-func bigSync(ds datas.Dataset) datas.Dataset {
+func littleSync(ds datas.Dataset) datas.Dataset {
 	srcdb, srcds, err := spec.GetDataset(os.Args[1])
 	if err != nil {
 		panic(err)
@@ -175,7 +175,6 @@ func bigSync(ds datas.Dataset) datas.Dataset {
 
 	head := srcds.HeadValue().(types.Struct)
 	allItems := head.Get("items").(types.Map)
-	topStories := head.Get("top").(types.List)
 
 	newItem := make(chan types.Struct, 100)
 	newStory := make(chan types.Value, 100)
@@ -184,7 +183,6 @@ func bigSync(ds datas.Dataset) datas.Dataset {
 	lastIndex := int(lastKey.(types.Number))
 
 	go func() {
-		//topStories.Iter(func(index types.Value, _ uint64) bool {
 		allItems.Iter(func(id, value types.Value) bool {
 			//value := allItems.Get(index)
 			item := value.(types.Struct)
@@ -192,9 +190,11 @@ func bigSync(ds datas.Dataset) datas.Dataset {
 			// Note that we're explicitly excluding items of type "job" and "poll" which may also be found in the list of top items.
 			switch item.Type().Desc.(types.StructDesc).Name {
 			case "story":
-				newItem <- item
+				myid := int(id.(types.Number))
+				if myid == 8432709.0 {
+					newItem <- item
+				}
 			}
-
 			return false
 		})
 		close(newItem)
@@ -232,11 +232,8 @@ func bigSync(ds datas.Dataset) datas.Dataset {
 
 	fmt.Println("map created")
 
-	top := topList(ds, topStories, stories)
-
 	srcds, err = srcdb.CommitValue(srcds, types.NewStruct("HackerNoms", types.StructData{
 		"stories": stories,
-		"top":     top,
 		"head":    types.String(srcds.Head().Hash().String()),
 	}))
 	if err != nil {
@@ -336,42 +333,6 @@ func comments(item types.Value, allItems types.Map) types.Value {
 	return ret
 }
 
-func topList(ds datas.Dataset, srcTop types.List, dstStories types.Map) types.List {
-	streamData := make(chan types.Value, 10)
-	newList := types.NewStreamingList(ds.Database(), streamData)
-
-	srcTop.IterAll(func(item types.Value, _ uint64) {
-		id := item.(types.Number)
-		v, ok := dstStories.MaybeGet(id)
-		if !ok {
-			fmt.Printf("%d in top stories, but not in map\n", int(id))
-			return
-		}
-
-		story := v.(types.Struct)
-
-		streamData <- types.NewStruct("StorySummary", types.StructData{
-			"id":          id,
-			"title":       SomeOf(story.Get("title")),
-			"url":         SomeOr(story.Get("url"), types.String("")), // The empty string denotes no URL.
-			"score":       SomeOf(story.Get("score")),
-			"by":          SomeOf(story.Get("by")),
-			"time":        story.Get("time"), // This will never be Nothing.
-			"descendants": SomeOf(story.Get("descendants")),
-			"story":       ds.Database().WriteValue(story),
-		})
-	})
-	close(streamData)
-
-	fmt.Println("stream completed")
-
-	top := <-newList
-
-	fmt.Println("list created")
-
-	return top
-}
-
 func update(ds datas.Dataset, old types.Value, new types.Value, dest types.Struct) types.Struct {
 	// 1. Diff old and new
 	// 2. For each changed id, find the changed story
@@ -382,7 +343,6 @@ func update(ds datas.Dataset, old types.Value, new types.Value, dest types.Struc
 
 	newHead := new.(types.Struct)
 	newItems := newHead.Get("items").(types.Map)
-	newTop := newHead.Get("top").(types.List)
 
 	changes := make(chan types.ValueChanged, 5)
 	stop := make(chan struct{}, 1)
@@ -452,7 +412,6 @@ func update(ds datas.Dataset, old types.Value, new types.Value, dest types.Struc
 	}
 
 	dest = dest.Set("stories", destStories)
-	dest = dest.Set("top", topList(ds, newTop, destStories))
 
 	return dest
 }
