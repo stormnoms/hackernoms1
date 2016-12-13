@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/attic-labs/noms/go/datas"
-	"github.com/attic-labs/noms/go/hash"
+	//"github.com/attic-labs/noms/go/hash"
 	"github.com/attic-labs/noms/go/spec"
 	"github.com/attic-labs/noms/go/types"
 )
@@ -127,15 +127,16 @@ func main() {
 		{"comments", types.MakeListType(commentType.t)},
 	})
 
-	hv, ok := ds.MaybeHeadValue()
+	_, ok := ds.MaybeHeadValue()
 	if !ok {
 		fmt.Println("doing the initial sync...")
 		ds = littleSync(ds)
-		hv = ds.HeadValue()
+//		hv = ds.HeadValue()
 	}
 
-	dstHead := hv.(types.Struct)
-
+//	dstHead := hv.(types.Struct)
+//	fmt.Println(dstHead.Hash())
+/*
 	for {
 		srcdb, srcds, err := spec.GetDataset(os.Args[1])
 		if err != nil {
@@ -164,6 +165,8 @@ func main() {
 
 		srcdb.Close()
 	}
+*/
+
 }
 
 func littleSync(ds datas.Dataset) datas.Dataset {
@@ -231,7 +234,9 @@ func littleSync(ds datas.Dataset) datas.Dataset {
 	stories := <-newMap
 
 	fmt.Println("map created")
+	fmt.Println("map length = ",stories.Len())
 
+/*
 	srcds, err = srcdb.CommitValue(srcds, types.NewStruct("HackerNoms", types.StructData{
 		"stories": stories,
 		"head":    types.String(srcds.Head().Hash().String()),
@@ -239,7 +244,7 @@ func littleSync(ds datas.Dataset) datas.Dataset {
 	if err != nil {
 		panic(err)
 	}
-
+*/
 	return ds
 }
 
