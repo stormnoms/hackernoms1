@@ -139,7 +139,7 @@ func main() {
 
 }
 
-func littleSync(ds datas.Dataset) datas.Dataset {
+func littleSync(dstds datas.Dataset) datas.Dataset {
 	srcdb, srcds, err := spec.GetDataset(os.Args[1])
 	if err != nil {
 		panic(err)
@@ -179,7 +179,7 @@ func littleSync(ds datas.Dataset) datas.Dataset {
 	})
 
 	streamData := make(chan types.Value, 100)
-	newMap := types.NewStreamingMap(ds.Database(), streamData)
+	newMap := types.NewStreamingMap(dstds.Database(), streamData)
 
 	start := time.Now()
 	count := 0
@@ -216,7 +216,7 @@ func littleSync(ds datas.Dataset) datas.Dataset {
 			panic(err)
 		}
 	*/
-	return ds
+	return dstds
 }
 
 func makeStories(allItems types.Map, newItem <-chan types.Struct, newStory chan<- types.Value) func() {
