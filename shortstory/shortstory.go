@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"reflect"
 	"sort"
 	"time"
 
@@ -261,6 +262,19 @@ func SomeOr(v types.Value, def types.Value) types.Value {
 
 // Process children; |item| may be a story or a comment.
 func comments(item types.Value, allItems types.Map) types.Value {
+
+	myid := item.(types.Struct).Get("id")
+	mytype := item.(types.Struct).Get("type")
+
+	fmt.Println(reflect.TypeOf(myid))
+	fmt.Println(reflect.TypeOf(mytype))
+
+	fmt.Println("Processing comments for id ", myid, " type = ", mytype)
+
+	if mytype == types.String("comment") {
+		fmt.Println("Got a comment")
+	}
+
 	ret := types.NewList()
 
 	c, ok := item.(types.Struct).MaybeGet("kids")
