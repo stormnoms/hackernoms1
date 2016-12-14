@@ -223,7 +223,7 @@ func makeStories(allItems types.Map, newItem <-chan types.Struct, newStory chan<
 	return func() {
 		for item := range newItem {
 			id := item.Get("id")
-			fmt.Printf("working on story %d\n", int(id.(types.Number)))
+			fmt.Printf("\n\nworking on story %d\n", int(id.(types.Number)))
 
 			// Known stubs with just id and type
 			if item.Type().Desc.(types.StructDesc).Len() == 2 {
@@ -280,11 +280,14 @@ func comments(item types.Value, allItems types.Map) types.Value {
 	//fmt.Println(reflect.TypeOf(myid))
 	//fmt.Println(reflect.TypeOf(mytype))
 
+	//id := item.Get("id")
+	//fmt.Printf("working on story %d\n", int(id.(types.Number)))
+
 	if mytype == types.String("comment") {
 		myparent := item.(types.Struct).Get("parent")
-		fmt.Println("parent is ", myparent, " for id ", myid, " type = ", mytype)
+		fmt.Println("parent is ", int(myparent.(types.Number)), " for id ", int(myid.(types.Number)), " type = ", mytype)
 	} else {
-		fmt.Println("id ", myid, " type = ", mytype)
+		fmt.Println("id ", int(myid.(types.Number)), " type = ", mytype)
 	}
 
 	ret := types.NewList()
