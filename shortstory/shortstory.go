@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"reflect"
+	//"reflect"
 	"sort"
 	"time"
 
@@ -266,13 +266,14 @@ func comments(item types.Value, allItems types.Map) types.Value {
 	myid := item.(types.Struct).Get("id")
 	mytype := item.(types.Struct).Get("type")
 
-	fmt.Println(reflect.TypeOf(myid))
-	fmt.Println(reflect.TypeOf(mytype))
-
-	fmt.Println("Processing comments for id ", myid, " type = ", mytype)
+	//fmt.Println(reflect.TypeOf(myid))
+	//fmt.Println(reflect.TypeOf(mytype))
 
 	if mytype == types.String("comment") {
-		fmt.Println("Got a comment")
+		myparent := item.(types.Struct).Get("parent")
+		fmt.Println("parent is ", myparent, " for id ", myid, " type = ", mytype)
+	} else {
+		fmt.Println("id ", myid, " type = ", mytype)
 	}
 
 	ret := types.NewList()
