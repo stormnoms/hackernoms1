@@ -41,18 +41,6 @@ import (
 //	}>
 // }>
 //
-// Turn the top stories into a list
-// List<Struct StorySummary {
-//	id Number
-//	title String
-//	url String | Nothing
-//	score Number
-//	by String
-//	time Number
-//	descendants Number
-//
-//	story Ref<Struct Story { ... }>
-// }>
 
 var nothing types.Value
 var nothingType *types.Type
@@ -137,36 +125,6 @@ func main() {
 
 //	dstHead := hv.(types.Struct)
 //	fmt.Println(dstHead.Hash())
-/*
-	for {
-		srcdb, srcds, err := spec.GetDataset(os.Args[1])
-		if err != nil {
-			panic(err)
-		}
-
-		dstHead = ds.HeadValue().(types.Struct)
-
-		oldHeadHash := hash.Parse(string(dstHead.Get("head").(types.String)))
-		oldHead := srcdb.ReadValue(oldHeadHash).(types.Struct).Get("value").(types.Struct)
-		currentHead := srcds.HeadValue().(types.Struct)
-
-		if oldHead.Equals(currentHead) {
-			// This is designed to run in a loop, but either Noms or Go is profoundly sloppy with memory. Put the loop outside the scope of this program (i.e. in the shell or an AWS ECS task) so that we get a fresh address space each time.
-			fmt.Println("no changes; exiting")
-			break
-		} else {
-			dstHead = update(ds, oldHead, currentHead, dstHead)
-			dstHead = dstHead.Set("head", types.String(srcds.Head().Hash().String()))
-
-			ds, err = db.CommitValue(ds, dstHead)
-			if err != nil {
-				panic(err)
-			}
-		}
-
-		srcdb.Close()
-	}
-*/
 
 }
 
