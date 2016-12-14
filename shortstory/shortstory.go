@@ -46,9 +46,19 @@ import (
 var nothing types.Value
 var nothingType *types.Type
 
+var EmptyStruct = struct{}{}
+var TargetIds = map[float64]struct{}{}
+
 func init() {
 	nothing = types.NewStruct("Nothing", types.StructData{})
 	nothingType = nothing.Type()
+	TargetIds[8432709.0] = EmptyStruct
+	TargetIds[8432758.0] = EmptyStruct
+	TargetIds[8432763.0] = EmptyStruct
+	TargetIds[8432838.0] = EmptyStruct
+	TargetIds[8432857.0] = EmptyStruct
+	TargetIds[8432914.0] = EmptyStruct
+	TargetIds[8432919.0] = EmptyStruct
 }
 
 var commentType *StructType
