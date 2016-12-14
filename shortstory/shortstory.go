@@ -47,18 +47,18 @@ var nothing types.Value
 var nothingType *types.Type
 
 var EmptyStruct = struct{}{}
-var TargetIds = map[float64]struct{}{}
+var TargetIds = map[int]struct{}{}
 
 func init() {
 	nothing = types.NewStruct("Nothing", types.StructData{})
 	nothingType = nothing.Type()
-	TargetIds[8432709.0] = EmptyStruct
-	TargetIds[8432758.0] = EmptyStruct
-	TargetIds[8432763.0] = EmptyStruct
-	TargetIds[8432838.0] = EmptyStruct
-	TargetIds[8432857.0] = EmptyStruct
-	TargetIds[8432914.0] = EmptyStruct
-	TargetIds[8432919.0] = EmptyStruct
+	TargetIds[8432709] = EmptyStruct
+	TargetIds[8432758] = EmptyStruct
+	TargetIds[8432763] = EmptyStruct
+	TargetIds[8432838] = EmptyStruct
+	TargetIds[8432857] = EmptyStruct
+	TargetIds[8432914] = EmptyStruct
+	TargetIds[8432919] = EmptyStruct
 }
 
 var commentType *StructType
@@ -131,11 +131,11 @@ func main() {
 	if !ok {
 		fmt.Println("doing the initial sync...")
 		ds = littleSync(ds)
-//		hv = ds.HeadValue()
+		//		hv = ds.HeadValue()
 	}
 
-//	dstHead := hv.(types.Struct)
-//	fmt.Println(dstHead.Hash())
+	//	dstHead := hv.(types.Struct)
+	//	fmt.Println(dstHead.Hash())
 
 }
 
@@ -164,7 +164,8 @@ func littleSync(ds datas.Dataset) datas.Dataset {
 			switch item.Type().Desc.(types.StructDesc).Name {
 			case "story":
 				myid := int(id.(types.Number))
-				if myid == 8432709.0 {
+				_, ok := TargetIds[myid]
+				if ok {
 					newItem <- item
 				}
 			}
@@ -204,17 +205,17 @@ func littleSync(ds datas.Dataset) datas.Dataset {
 	stories := <-newMap
 
 	fmt.Println("map created")
-	fmt.Println("map length = ",stories.Len())
+	fmt.Println("map length = ", stories.Len())
 
-/*
-	srcds, err = srcdb.CommitValue(srcds, types.NewStruct("HackerNoms", types.StructData{
-		"stories": stories,
-		"head":    types.String(srcds.Head().Hash().String()),
-	}))
-	if err != nil {
-		panic(err)
-	}
-*/
+	/*
+		srcds, err = srcdb.CommitValue(srcds, types.NewStruct("HackerNoms", types.StructData{
+			"stories": stories,
+			"head":    types.String(srcds.Head().Hash().String()),
+		}))
+		if err != nil {
+			panic(err)
+		}
+	*/
 	return ds
 }
 
@@ -411,7 +412,7 @@ func NewRedisConfig() *RedisConfig {
 	return cfg
 }
 
-func getRedisConn() (c redis.Conn){
+func getRedisConn() (c redis.Conn) {
 
 	cfg := NewRedisConfig()
 	connect_string := cfg.Connect_string()
