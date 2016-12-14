@@ -83,13 +83,13 @@ func main() {
 	}
 	srcdb.Close()
 
-	db, ds, err := spec.GetDataset(os.Args[2])
+	dstdb, dstds, err := spec.GetDataset(os.Args[2])
 	if err != nil {
 		fmt.Printf("invalid destination dataset: %s\n", os.Args[2])
 		fmt.Printf("%s\n", err)
 		return
 	}
-	defer db.Close()
+	defer dstdb.Close()
 
 	// Create our types.
 	optionString := types.MakeUnionType(types.StringType, nothingType)
@@ -127,10 +127,10 @@ func main() {
 		{"comments", types.MakeListType(commentType.t)},
 	})
 
-	_, ok := ds.MaybeHeadValue()
+	_, ok := dstds.MaybeHeadValue()
 	if !ok {
 		fmt.Println("doing the initial sync...")
-		ds = littleSync(ds)
+		dstds = littleSync(dstds)
 		//		hv = ds.HeadValue()
 	}
 
