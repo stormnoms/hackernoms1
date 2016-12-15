@@ -230,17 +230,13 @@ func littleSync(dstdb datas.Database, dstds datas.Dataset) datas.Dataset {
 		}
 	*/
 
-
-		dstds, err = dstdb.CommitValue(dstds, types.NewStruct("HackerNoms", types.StructData{
-			"stories": stories,
-			//"michael": types.String("angerman"),
-			//"head":    types.String(srcds.Head().Hash().String()),
-		}))
-		if err != nil {
-			panic(err)
-		}
-
-
+	dstds, err = dstdb.CommitValue(dstds, types.NewStruct("HackerNoms", types.StructData{
+		"stories": stories,
+		//"head":    types.String(dstds.Head().Hash().String()),
+	}))
+	if err != nil {
+		panic(err)
+	}
 
 	return dstds
 }
