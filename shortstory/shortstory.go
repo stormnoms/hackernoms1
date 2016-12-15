@@ -52,13 +52,26 @@ var TargetIds = map[int]struct{}{}
 func init() {
 	nothing = types.NewStruct("Nothing", types.StructData{})
 	nothingType = nothing.Type()
-	TargetIds[8432709] = EmptyStruct
-	TargetIds[8432758] = EmptyStruct
+	//  49 Descendants
+	//	TargetIds[8432709] = EmptyStruct
+
+	//  4 Descendants
+	//	TargetIds[8432758] = EmptyStruct
+
+	//  1 Descendant
 	TargetIds[8432763] = EmptyStruct
-	TargetIds[8432838] = EmptyStruct
-	TargetIds[8432857] = EmptyStruct
-	TargetIds[8432914] = EmptyStruct
-	TargetIds[8432919] = EmptyStruct
+
+	//  4 Descendants
+	//	TargetIds[8432838] = EmptyStruct
+
+	//  15 Descendants
+	//	TargetIds[8432857] = EmptyStruct
+
+	//  10 Descendants
+	//	TargetIds[8432914] = EmptyStruct
+
+	//  30 Descendants
+	//	TargetIds[8432919] = EmptyStruct
 }
 
 var commentType *StructType
@@ -223,7 +236,8 @@ func makeStories(allItems types.Map, newItem <-chan types.Struct, newStory chan<
 	return func() {
 		for item := range newItem {
 			id := item.Get("id")
-			fmt.Printf("\n\nworking on story %d\n", int(id.(types.Number)))
+			descendants := item.Get("descendants")
+			fmt.Printf("\n\nworking on story %d with %d descendants\n", int(id.(types.Number)), int(descendants.(types.Number)))
 
 			// Known stubs with just id and type
 			if item.Type().Desc.(types.StructDesc).Len() == 2 {
