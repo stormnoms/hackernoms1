@@ -143,7 +143,7 @@ func main() {
 	_, ok := dstds.MaybeHeadValue()
 	if !ok {
 		fmt.Println("doing the initial sync...")
-		dstds = littleSync(dstds)
+		dstds = littleSync(dstdb, dstds)
 		//		hv = ds.HeadValue()
 	}
 
@@ -152,7 +152,7 @@ func main() {
 
 }
 
-func littleSync(dstds datas.Dataset) datas.Dataset {
+func littleSync(dstdb datas.Database, dstds datas.Dataset) datas.Dataset {
 	srcdb, srcds, err := spec.GetDataset(os.Args[1])
 	if err != nil {
 		panic(err)
@@ -229,6 +229,19 @@ func littleSync(dstds datas.Dataset) datas.Dataset {
 			panic(err)
 		}
 	*/
+
+
+		dstds, err = dstdb.CommitValue(dstds, types.NewStruct("HackerNoms", types.StructData{
+			"stories": stories,
+			//"michael": types.String("angerman"),
+			//"head":    types.String(srcds.Head().Hash().String()),
+		}))
+		if err != nil {
+			panic(err)
+		}
+
+
+
 	return dstds
 }
 
