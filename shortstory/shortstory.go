@@ -9,12 +9,10 @@ import (
 	"fmt"
 	"os"
 	"path"
-	//"reflect"
 	"sort"
 	"time"
 
 	"github.com/attic-labs/noms/go/datas"
-	//"github.com/attic-labs/noms/go/hash"
 	"github.com/attic-labs/noms/go/spec"
 	"github.com/attic-labs/noms/go/types"
 	"github.com/garyburd/redigo/redis"
@@ -53,25 +51,25 @@ func init() {
 	nothing = types.NewStruct("Nothing", types.StructData{})
 	nothingType = nothing.Type()
 	//  49 Descendants
-	//	TargetIds[8432709] = EmptyStruct
+	TargetIds[8432709] = EmptyStruct
 
 	//  4 Descendants
-	//	TargetIds[8432758] = EmptyStruct
+	TargetIds[8432758] = EmptyStruct
 
 	//  1 Descendant
 	TargetIds[8432763] = EmptyStruct
 
 	//  4 Descendants
-	//	TargetIds[8432838] = EmptyStruct
+	TargetIds[8432838] = EmptyStruct
 
 	//  15 Descendants
-	//	TargetIds[8432857] = EmptyStruct
+	TargetIds[8432857] = EmptyStruct
 
 	//  10 Descendants
-	//	TargetIds[8432914] = EmptyStruct
+	TargetIds[8432914] = EmptyStruct
 
 	//  30 Descendants
-	//	TargetIds[8432919] = EmptyStruct
+	TargetIds[8432919] = EmptyStruct
 }
 
 var commentType *StructType
@@ -144,25 +142,16 @@ func main() {
 	if !ok {
 		fmt.Println("doing the initial sync...")
 		dstds = littleSync(dstdb, dstds)
-		//hv = dstds.HeadValue()
 	}
 
-	//dstHead := hv.(types.Struct)
-	//headHash := hash.Parse(string(dstHead.Get("stories").(types.Map)))
-	//fmt.Println(headHash)
-	headCheck := "d8b8k7s6d6ojfa3124uq5q5sru1es7lc"
+	headCheck := "hfgddlpctjffdgaq7ap8msjtr0u9umai"
 	headHash := dstds.Head().Hash().String()
-
+	//fmt.Println(headHash)
 	if headCheck == headHash {
 		fmt.Println("All is well")
 	} else {
 		fmt.Println("Somethings not right")
 	}
-	//dstHead = dstHead.Set("head", types.String(srcds.Head().Hash().String()))
-
-//	oldHeadHash := hash.Parse(string(dstHead.Get("head").(types.String)))
-//	oldHead := srcdb.ReadValue(oldHeadHash).(types.Struct).Get("value").(types.Struct)
-//	currentHead := srcds.HeadValue().(types.Struct)
 }
 
 func littleSync(dstdb datas.Database, dstds datas.Dataset) datas.Dataset {
