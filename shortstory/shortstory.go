@@ -172,7 +172,6 @@ func littleSync(dstdb datas.Database, dstds datas.Dataset) datas.Dataset {
 
 	go func() {
 		allItems.Iter(func(id, value types.Value) bool {
-			//value := allItems.Get(index)
 			item := value.(types.Struct)
 
 			// Note that we're explicitly excluding items of type "job" and "poll" which may also be found in the list of top items.
@@ -221,16 +220,6 @@ func littleSync(dstdb datas.Database, dstds datas.Dataset) datas.Dataset {
 
 	fmt.Println("map created")
 	fmt.Println("map length = ", stories.Len())
-
-	/*
-		srcds, err = srcdb.CommitValue(srcds, types.NewStruct("HackerNoms", types.StructData{
-			"stories": stories,
-			"head":    types.String(srcds.Head().Hash().String()),
-		}))
-		if err != nil {
-			panic(err)
-		}
-	*/
 
 	dstds, err = dstdb.CommitValue(dstds, types.NewStruct("HackerNoms", types.StructData{
 		"stories": stories,
@@ -282,20 +271,6 @@ func OptionGet(st types.Struct, field string) types.Value {
 	}
 }
 
-func SomeOf(v types.Value) types.Value {
-	if v.Type() == nothingType {
-		panic("nothing!")
-	}
-	return v
-}
-
-func SomeOr(v types.Value, def types.Value) types.Value {
-	if v.Type() == nothingType {
-		return def
-	}
-	return v
-}
-
 // Process children; |item| may be a story or a comment.
 func comments(item types.Value, allItems types.Map) types.Value {
 
@@ -304,9 +279,6 @@ func comments(item types.Value, allItems types.Map) types.Value {
 
 	//fmt.Println(reflect.TypeOf(myid))
 	//fmt.Println(reflect.TypeOf(mytype))
-
-	//id := item.Get("id")
-	//fmt.Printf("working on story %d\n", int(id.(types.Number)))
 
 	if mytype == types.String("comment") {
 		myparent := item.(types.Struct).Get("parent")
