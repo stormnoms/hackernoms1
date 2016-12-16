@@ -144,12 +144,25 @@ func main() {
 	if !ok {
 		fmt.Println("doing the initial sync...")
 		dstds = littleSync(dstdb, dstds)
-		//		hv = ds.HeadValue()
+		//hv = dstds.HeadValue()
 	}
 
-	//	dstHead := hv.(types.Struct)
-	//	fmt.Println(dstHead.Hash())
+	//dstHead := hv.(types.Struct)
+	//headHash := hash.Parse(string(dstHead.Get("stories").(types.Map)))
+	//fmt.Println(headHash)
+	headCheck := "d8b8k7s6d6ojfa3124uq5q5sru1es7lc"
+	headHash := dstds.Head().Hash().String()
 
+	if headCheck == headHash {
+		fmt.Println("All is well")
+	} else {
+		fmt.Println("Somethings not right")
+	}
+	//dstHead = dstHead.Set("head", types.String(srcds.Head().Hash().String()))
+
+//	oldHeadHash := hash.Parse(string(dstHead.Get("head").(types.String)))
+//	oldHead := srcdb.ReadValue(oldHeadHash).(types.Struct).Get("value").(types.Struct)
+//	currentHead := srcds.HeadValue().(types.Struct)
 }
 
 func littleSync(dstdb datas.Database, dstds datas.Dataset) datas.Dataset {
