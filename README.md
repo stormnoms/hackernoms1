@@ -21,6 +21,13 @@ https://github.com/zabawaba99/firego/tree/3b73602864a1c8786cb73f5c8b20718573a97e
 ### To run sync
 
 ```
+cd sync
+go build
+./sync ./mynoms::hn
+
+OR
+
+cd sync
 go run sync.go /tmp/my-noms::hn
 ```
 
